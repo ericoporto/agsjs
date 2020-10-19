@@ -1,0 +1,131 @@
+<!doctype HTML>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <title>AGS SDL2 Emscripten test</title>
+    <style>
+      html {
+          width: 100%;
+          height: 100%;
+      }
+      body {
+          display: -webkit-flex;
+          display: flex;
+          -webkit-flex-direction: column;
+          flex-direction: column;
+          width: 100%;
+          height: 100%;
+          font-family: sans-serif;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+      }
+      #canvas {
+          -webkit-flex: 1;
+          flex: 1;
+          width: 100%;
+          min-height: 10%;
+      }
+      #status {
+          background-color: hsl(60,20%,90%);
+          text-align: center;
+          height: 0;
+      }
+      #output {
+          background-color: hsla(240,10%,10%,0.0);
+          color: black;
+          border: none;
+          padding: 0 1em;
+          position: absolute;
+          right: 0; width: 50%;
+          bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="status">Downloading...</div>
+
+    <textarea id="output" rows="8"></textarea>
+    
+	<p>Can't yet support .vox and other types of files...</p>
+	<label for="avatar">Put a .ags game with every dependencies built in.</label>
+
+    <canvas id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+	<script>
+	
+      var Module = {
+          preRun: [
+            function () {
+                var data = new Uint8Array(fileresulthere);
+
+                Module['FS_createDataFile']('/', game_file.name, data, true, true, true);
+                //Module.ccall('main','number', ['number', 'string'], [2, file.name]);
+                
+                self.canvasContext = self.canvas.getContext('2d');
+                self.canvasContext.globalAlpha = 1.0;
+                self.canvasImageData = self.canvasContext.getImageData(0, 0, 640, 288);
+            }
+        ],
+          print: (function(text) {
+              var element = document.getElementById('output');
+              if (element) element.value = ''; // clear browser cache
+              return function(text) {
+                  if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+                  console.log(text);
+                  if (element) {
+                      element.value += text + "\n";
+                      element.scrollTop = element.scrollHeight; // focus on bottom
+                  }
+              };
+          })(),
+          printErr: function(text) { console.error(text); },
+          setStatus: (function(text) {
+              var element = document.getElementById('status');
+              if (element) element.textContent = ''; // clear browser cache
+              return function(text) { element.textContent = text; };
+          })(),
+          canvas: document.getElementById('canvas'),
+      };
+	
+	var fileresulthere = {};
+	var game_file = {};
+	
+	function agsAttachFileInput(fileInput) {
+    if (fileInput.files.length == 0)
+        return;
+    game_file = fileInput.files[0];
+
+    var fr = new FileReader();
+    fr.onload = function () {
+        fileresulthere = fr.result;
+
+			!function(e, t){
+				console.log("Loading client...");
+				var n = "ags.js";
+				console.log("Script set to " + n);
+				var o = t.createElement("script");
+				o.async = !0, o.type = "text/javascript", o.src = n, o.onerror = function(t) {
+					console.error("Script Error"), console.error(t), setTimeout(function() {
+						e.location.reload(!0)
+					}, 3e3)
+				};
+				var r = t.getElementsByTagName("script")[0];
+				r.parentNode.insertBefore(o, r)
+			}(window, document);
+
+        //fileInput.value = '';
+        
+    };
+    fr.readAsArrayBuffer(game_file);
+}
+	</script>
+
+<input type="file"
+       id="agsgamepkgid" name="agsgamepkg" onchange="agsAttachFileInput(this);" 
+       accept="*/*">
+    
+    
+    
+  </body>
+</html>
+
