@@ -1161,7 +1161,7 @@ assert(STACK_BASE % 16 === 0, 'stack must start aligned');
 var TOTAL_STACK = 5242880;
 if (Module['TOTAL_STACK']) assert(TOTAL_STACK === Module['TOTAL_STACK'], 'the stack size can no longer be determined at runtime')
 
-var INITIAL_INITIAL_MEMORY = Module['INITIAL_MEMORY'] || 1073741824;if (!Object.getOwnPropertyDescriptor(Module, 'INITIAL_MEMORY')) Object.defineProperty(Module, 'INITIAL_MEMORY', { configurable: true, get: function() { abort('Module.INITIAL_MEMORY has been replaced with plain INITIAL_INITIAL_MEMORY (the initial value can be provided on Module, but after startup the value is only looked for on a local variable of that name)') } });
+var INITIAL_INITIAL_MEMORY = Module['INITIAL_MEMORY'] || 16777216;if (!Object.getOwnPropertyDescriptor(Module, 'INITIAL_MEMORY')) Object.defineProperty(Module, 'INITIAL_MEMORY', { configurable: true, get: function() { abort('Module.INITIAL_MEMORY has been replaced with plain INITIAL_INITIAL_MEMORY (the initial value can be provided on Module, but after startup the value is only looked for on a local variable of that name)') } });
 
 assert(INITIAL_INITIAL_MEMORY >= TOTAL_STACK, 'INITIAL_MEMORY should be larger than TOTAL_STACK, was ' + INITIAL_INITIAL_MEMORY + '! (TOTAL_STACK=' + TOTAL_STACK + ')');
 
@@ -1184,7 +1184,7 @@ assert(typeof Int32Array !== 'undefined' && typeof Float64Array !== 'undefined' 
     wasmMemory = new WebAssembly.Memory({
       'initial': INITIAL_INITIAL_MEMORY / WASM_PAGE_SIZE
       ,
-      'maximum': INITIAL_INITIAL_MEMORY / WASM_PAGE_SIZE
+      'maximum': 2147483648 / WASM_PAGE_SIZE
     });
   }
 
@@ -1197,6 +1197,7 @@ if (wasmMemory) {
 // specifically provide the memory length with Module['INITIAL_MEMORY'].
 INITIAL_INITIAL_MEMORY = buffer.byteLength;
 assert(INITIAL_INITIAL_MEMORY % WASM_PAGE_SIZE === 0);
+assert(65536 % WASM_PAGE_SIZE === 0);
 updateGlobalBufferAndViews(buffer);
 
 
@@ -1548,126 +1549,6 @@ function getBinaryPromise() {
   return Promise.resolve().then(getBinary);
 }
 
-var wasmSourceMap;
-
-
-
-function WasmSourceMap(sourceMap) {
-  this.version = sourceMap.version;
-  this.sources = sourceMap.sources;
-  this.names = sourceMap.names;
-
-  this.mapping = {};
-  this.offsets = [];
-
-  var vlqMap = {};
-  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='.split('').forEach(function (c, i) {
-    vlqMap[c] = i;
-  });
-
-  // based on https://github.com/Rich-Harris/vlq/blob/master/src/vlq.ts
-  function decodeVLQ(string) {
-    var result = [];
-    var shift = 0;
-    var value = 0;
-
-    for (var i = 0; i < string.length; ++i) {
-      var integer = vlqMap[string[i]];
-      if (integer === undefined) {
-        throw new Error('Invalid character (' + string[i] + ')');
-      }
-
-      value += (integer & 31) << shift;
-
-      if (integer & 32) {
-        shift += 5;
-      } else {
-        var negate = value & 1;
-        value >>= 1;
-        result.push(negate ? -value : value);
-        value = shift = 0;
-      }
-    }
-    return result;
-  }
-
-  var offset = 0, src = 0, line = 1, col = 1, name = 0;
-  sourceMap.mappings.split(',').forEach(function (segment, index) {
-    if (!segment) return;
-    var data = decodeVLQ(segment);
-    var info = {};
-
-    offset += data[0];
-    if (data.length >= 2) info.source = src += data[1];
-    if (data.length >= 3) info.line = line += data[2];
-    if (data.length >= 4) info.column = col += data[3];
-    if (data.length >= 5) info.name = name += data[4];
-    this.mapping[offset] = info;
-    this.offsets.push(offset);
-  }, this);
-  this.offsets.sort(function (a, b) { return a - b; });
-}
-
-WasmSourceMap.prototype.lookup = function (offset) {
-  var normalized = this.normalizeOffset(offset);
-  if (!wasmOffsetConverter.isSameFunc(offset, normalized)) {
-    return null;
-  }
-  var info = this.mapping[normalized];
-  if (!info) {
-    return null;
-  }
-  return {
-    source: this.sources[info.source],
-    line: info.line,
-    column: info.column,
-    name: this.names[info.name],
-  };
-}
-
-WasmSourceMap.prototype.normalizeOffset = function (offset) {
-  var lo = 0;
-  var hi = this.offsets.length;
-  var mid;
-
-  while (lo < hi) {
-    mid = Math.floor((lo + hi) / 2);
-    if (this.offsets[mid] > offset) {
-      hi = mid;
-    } else {
-      lo = mid + 1;
-    }
-  }
-  return this.offsets[lo - 1];
-}
-
-var wasmSourceMapFile = 'ags.wasm.map';
-if (!isDataURI(wasmBinaryFile)) {
-  wasmSourceMapFile = locateFile(wasmSourceMapFile);
-}
-
-function getSourceMap() {
-  try {
-    return JSON.parse(read_(wasmSourceMapFile));
-  } catch (err) {
-    abort(err);
-  }
-}
-
-function getSourceMapPromise() {
-  if ((ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) && typeof fetch === 'function') {
-    return fetch(wasmSourceMapFile, { credentials: 'same-origin' }).then(function(response) {
-      return response['json']();
-    }).catch(function () {
-      return getSourceMap();
-    });
-  }
-  return new Promise(function(resolve, reject) {
-    resolve(getSourceMap());
-  });
-}
-
-
 
 var wasmOffsetConverter;
 
@@ -1859,12 +1740,6 @@ function createWasm() {
   // we can't run yet (except in a pthread, where we have a custom sync instantiator)
   addRunDependency('wasm-instantiate');
 
-  addRunDependency('source-map');
-
-  function receiveSourceMapJSON(sourceMap) {
-    wasmSourceMap = new WasmSourceMap(sourceMap);
-    removeRunDependency('source-map');
-  }
 
   // Async compilation can be confusing when an error on the page overwrites Module
   // (for example, if the order of elements is wrong, and the one defining Module is
@@ -1942,7 +1817,6 @@ function createWasm() {
   }
 
   instantiateAsync();
-  getSourceMapPromise().then(receiveSourceMapJSON);
   return {}; // no exports yet; we'll fill them in later
 }
 
@@ -3030,6 +2904,13 @@ var ASM_CONSTS = {
         },write:function(stream, buffer, offset, length, position, canOwn) {
           // The data buffer should be a typed array view
           assert(!(buffer instanceof ArrayBuffer));
+          // If the buffer is located in main memory (HEAP), and if
+          // memory can grow, we can't hold on to references of the
+          // memory buffer, as they may get invalidated. That means we
+          // need to do copy its contents.
+          if (buffer.buffer === HEAP8.buffer) {
+            canOwn = false;
+          }
   
           if (!length) return 0;
           var node = stream.node;
@@ -11095,12 +10976,6 @@ var ASM_CONSTS = {
   
       var match;
       var source;
-      if (wasmSourceMap) {
-        var info = wasmSourceMap.lookup(pc);
-        if (info) {
-          source = {file: info.source, line: info.line, column: info.column};
-        }
-      }
   
       if (!source) {
         var frame = UNWIND_CACHE[pc];
@@ -11234,12 +11109,64 @@ var ASM_CONSTS = {
       return __requestPointerLock(target);
     }
 
-  function abortOnCannotGrowMemory(requestedSize) {
-      abort('Cannot enlarge memory arrays to size ' + requestedSize + ' bytes (OOM). Either (1) compile with  -s INITIAL_MEMORY=X  with X higher than the current value ' + HEAP8.length + ', (2) compile with  -s ALLOW_MEMORY_GROWTH=1  which allows increasing the size at runtime, or (3) if you want malloc to return NULL (0) instead of this abort, compile with  -s ABORTING_MALLOC=0 ');
+  function emscripten_realloc_buffer(size) {
+      try {
+        // round size grow request up to wasm page size (fixed 64KB per spec)
+        wasmMemory.grow((size - buffer.byteLength + 65535) >>> 16); // .grow() takes a delta compared to the previous size
+        updateGlobalBufferAndViews(wasmMemory.buffer);
+        return 1 /*success*/;
+      } catch(e) {
+        console.error('emscripten_realloc_buffer: Attempted to grow heap from ' + buffer.byteLength  + ' bytes to ' + size + ' bytes, but got error: ' + e);
+      }
+      // implicit 0 return to save code size (caller will cast "undefined" into 0
+      // anyhow)
     }
   function _emscripten_resize_heap(requestedSize) {
       requestedSize = requestedSize >>> 0;
-      abortOnCannotGrowMemory(requestedSize);
+      var oldSize = _emscripten_get_heap_size();
+      // With pthreads, races can happen (another thread might increase the size in between), so return a failure, and let the caller retry.
+      assert(requestedSize > oldSize);
+  
+  
+      // Memory resize rules:
+      // 1. When resizing, always produce a resized heap that is at least 16MB (to avoid tiny heap sizes receiving lots of repeated resizes at startup)
+      // 2. Always increase heap size to at least the requested size, rounded up to next page multiple.
+      // 3a. If MEMORY_GROWTH_LINEAR_STEP == -1, excessively resize the heap geometrically: increase the heap size according to 
+      //                                         MEMORY_GROWTH_GEOMETRIC_STEP factor (default +20%),
+      //                                         At most overreserve by MEMORY_GROWTH_GEOMETRIC_CAP bytes (default 96MB).
+      // 3b. If MEMORY_GROWTH_LINEAR_STEP != -1, excessively resize the heap linearly: increase the heap size by at least MEMORY_GROWTH_LINEAR_STEP bytes.
+      // 4. Max size for the heap is capped at 2048MB-WASM_PAGE_SIZE, or by MAXIMUM_MEMORY, or by ASAN limit, depending on which is smallest
+      // 5. If we were unable to allocate as much memory, it may be due to over-eager decision to excessively reserve due to (3) above.
+      //    Hence if an allocation fails, cut down on the amount of excess growth, in an attempt to succeed to perform a smaller allocation.
+  
+      // A limit was set for how much we can grow. We should not exceed that
+      // (the wasm binary specifies it, so if we tried, we'd fail anyhow).
+      var maxHeapSize = 2147483648;
+      if (requestedSize > maxHeapSize) {
+        err('Cannot enlarge memory, asked to go up to ' + requestedSize + ' bytes, but the limit is ' + maxHeapSize + ' bytes!');
+        return false;
+      }
+  
+      var minHeapSize = 16777216;
+  
+      // Loop through potential heap size increases. If we attempt a too eager reservation that fails, cut down on the
+      // attempted size and reserve a smaller bump instead. (max 3 times, chosen somewhat arbitrarily)
+      for(var cutDown = 1; cutDown <= 4; cutDown *= 2) {
+        var overGrownHeapSize = oldSize * (1 + 0.2 / cutDown); // ensure geometric growth
+        // but limit overreserving (default to capping at +96MB overgrowth at most)
+        overGrownHeapSize = Math.min(overGrownHeapSize, requestedSize + 100663296 );
+  
+  
+        var newSize = Math.min(maxHeapSize, alignUp(Math.max(minHeapSize, requestedSize, overGrownHeapSize), 65536));
+  
+        var replacement = emscripten_realloc_buffer(newSize);
+        if (replacement) {
+  
+          return true;
+        }
+      }
+      err('Failed to grow the heap from ' + oldSize + ' bytes to ' + newSize + ' bytes, not enough memory!');
+      return false;
     }
 
   function _emscripten_sample_gamepad_data() {
@@ -12100,7 +12027,7 @@ var ASM_CONSTS = {
       switch(name) {
         case 30: return 16384;
         case 85:
-          var maxHeapSize = HEAPU8.length;
+          var maxHeapSize = 2147483648;
           return maxHeapSize / 16384;
         case 132:
         case 133:
@@ -13226,7 +13153,6 @@ if (!Object.getOwnPropertyDescriptor(Module, "setTempRet0")) Module["setTempRet0
 if (!Object.getOwnPropertyDescriptor(Module, "callMain")) Module["callMain"] = function() { abort("'callMain' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") };
 if (!Object.getOwnPropertyDescriptor(Module, "abort")) Module["abort"] = function() { abort("'abort' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") };
 if (!Object.getOwnPropertyDescriptor(Module, "stringToNewUTF8")) Module["stringToNewUTF8"] = function() { abort("'stringToNewUTF8' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") };
-if (!Object.getOwnPropertyDescriptor(Module, "abortOnCannotGrowMemory")) Module["abortOnCannotGrowMemory"] = function() { abort("'abortOnCannotGrowMemory' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") };
 if (!Object.getOwnPropertyDescriptor(Module, "emscripten_realloc_buffer")) Module["emscripten_realloc_buffer"] = function() { abort("'emscripten_realloc_buffer' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") };
 if (!Object.getOwnPropertyDescriptor(Module, "ENV")) Module["ENV"] = function() { abort("'ENV' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") };
 if (!Object.getOwnPropertyDescriptor(Module, "ERRNO_CODES")) Module["ERRNO_CODES"] = function() { abort("'ERRNO_CODES' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") };
