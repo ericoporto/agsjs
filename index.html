@@ -53,6 +53,24 @@
 
     <canvas id="canvas" oncontextmenu="event.preventDefault()"></canvas>
 	<script>
+	  function getPrettyTime()
+	  {
+        var d = new Date();
+        var h = addZero(d.getHours(), 2);
+        var m = addZero(d.getMinutes(), 2);
+        var s = addZero(d.getSeconds(), 2);
+        var ms = addZero(d.getMilliseconds(), 3);
+        var fullDate = h + ":" + m + ":" + s + ":" + ms;
+
+        function addZero(x, n) {
+            while (x.toString().length < n) {
+                x = "0" + x;
+            }
+            return x;
+        }
+        return fullDate;
+	  }
+	
 	
       var Module = {
           preRun: [
@@ -68,13 +86,16 @@
             }
         ],
           print: (function(text) {
+          
               var element = document.getElementById('output');
               if (element) element.value = ''; // clear browser cache
               return function(text) {
                   if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
-                  console.log(text);
+                  var time =  getPrettyTime();
+                  var print_text = time + ": " + text;
+                  console.log(print_text);
                   if (element) {
-                      element.value += text + "\n";
+                      element.value += print_text + "\n";
                       element.scrollTop = element.scrollHeight; // focus on bottom
                   }
               };
