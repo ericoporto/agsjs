@@ -15,7 +15,7 @@
       div.emscripten { text-align: center; }      
       div.emscripten_border { border: 1px solid black; }
       /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
-      canvas.emscripten { border: 0px none; background-color: black; }
+      canvas.emscripten { min-height: 360px; min-width: 640px; border: 0px none; background-color: black; }
 
       #emscripten_logo {
         display: inline-block;
@@ -143,7 +143,7 @@
               
               if(file_read_count == file_total_count)
               {
-                  Module.callMain(['/' + game_file.name]);
+                  Module.callMain(['/' + game_file.name , '--windowed', '--fps']);
               }
               else
               {
@@ -162,11 +162,9 @@
   <span><input type="file"
        id="agsgamepkgid" name="agsgamepkg" multiple="multiple" onchange="agsAttachFileInput(this);" 
        accept="*/*"><label for="agsgamepkgid">Put a .ags game with every dependencies built in.</label></span>
-  <span><input type="checkbox" id="resize">Resize canvas</span>
+  <span hidden=1><input type="checkbox" id="resize" checked>Resize canvas</span>
   <span><input type="checkbox" id="pointerLock" checked>Lock/hide mouse pointer &nbsp;&nbsp;&nbsp;</span>
-  <span><input type="button" value="Fullscreen" onclick="Module.requestFullscreen(document.getElementById('pointerLock').checked, 
-                                                                            document.getElementById('resize').checked)">
-  </span>
+
 </span>
 
     <div class="emscripten">
@@ -233,6 +231,11 @@
         canvas: (function() {
           var canvas = document.getElementById('canvas');
 
+          window.addEventListener ("resize", function (e) {
+              Module.canvas.style.width = canvas.clientWidth + "px";
+              Module.canvas.style.height = canvas.clientHeight + "px";
+          }, true);
+
           // As a default initial behavior, pop up an alert when webgl context is lost. To make your
           // application robust, you may want to override this behavior before shipping!
           // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
@@ -277,6 +280,8 @@
           if (text) Module.printErr('[post-exception status] ' + text);
         };
       };
+      
+
     </script>
 
     <script async type="text/javascript" src="ags.js"></script>
