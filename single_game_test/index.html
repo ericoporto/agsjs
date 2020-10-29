@@ -148,7 +148,7 @@ game_file = "";
 function loadGameFile(filename)
 {
 var oReq = new XMLHttpRequest();
-oReq.open("GET", "/"+filename, true); 
+oReq.open("GET", filename, true); 
 oReq.responseType = "arraybuffer"; 
 oReq.onload = function (oEvent) 
 { 
