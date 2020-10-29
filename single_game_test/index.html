@@ -197,7 +197,7 @@ gamefiles[i].endsWith(".ags")))
           
 file_read_count = 0;
 
-loadGameFile(gamefiles[0]);
+
     
       
     </script>
@@ -221,7 +221,7 @@ loadGameFile(gamefiles[0]);
         Module = {
           arguments: [],
           preRun: [],
-          postRun: [],
+          postRun: [function(){loadGameFile(gamefiles[0]);}],
           print: function() {
             var e = document.getElementById("output");
             return e && (e.value = ""),
