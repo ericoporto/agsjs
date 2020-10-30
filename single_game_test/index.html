@@ -243,7 +243,10 @@ gamefiles[i].endsWith(".ags")))
 file_read_count = 0;
 
 
-    
+window.addEventListener("orientationchange", function() {
+    // Generate a resize event if the device doesn't do it
+    window.dispatchEvent(new Event("resize"));
+}, false);      
       
     </script>
     
@@ -311,3 +314,5 @@ file_read_count = 0;
   </body>
 
   </html>
+ressElement.value = 100 * parseInt(t[2]), progressElement.max = 100 * parseInt(t[4]), progressElement
+                .hidden = !1, spinn
