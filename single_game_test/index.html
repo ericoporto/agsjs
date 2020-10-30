@@ -149,6 +149,24 @@
 
   <body>
     <script>
+function writeMsgOnCanvas(textToWrtOnCnv)
+{
+  var c = document.getElementById('canvas');
+  var ctx = c.getContext('2d');
+
+  ctx.fillStyle = '#000000';
+  cxt.fillRect(0, 0, c.width, c.height);
+
+  ctx.fillStyle = '#aaaaaa';
+  ctx.font = "bold 24px verdana, sans-serif";
+  ctx.textBaseline = 'middle'; 
+  ctx.textAlign = 'center'; 
+
+  ctx.fillText(textToWrtOnCnv, canvas_width/2, canvas_height/2);
+}
+
+
+    
       var fileresulthere = {},
         game_file = {};
 
@@ -159,6 +177,7 @@ game_file = "";
 
 function loadGameFile(filename)
 {
+writeMsgOnCanvas('loading '+filename+'...');
 var oReq = new XMLHttpRequest();
 oReq.open("GET", filename, true); 
 oReq.responseType = "arraybuffer"; 
@@ -261,6 +280,7 @@ file_read_count = 0;
               }), e !== Module.setStatus.last.text) {
               var t = e.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/),
                 n = Date.now();
+                writeMsgOnCanvas(e);
               t && n - Module.setStatus.last.time < 30 || (Module.setStatus.last.time = n, Module.setStatus.last.text = e, t ? (e = t[1], progressElement.value = 100 * parseInt(t[2]), progressElement.max = 100 * parseInt(t[4]), progressElement
                 .hidden = !1, spinnerElement.hidden = !1) : (progressElement.value = null, progressElement.max = null, progressElement.hidden = !0, e || (spinnerElement.hidden = !0)), statusElement.innerHTML = e)
             }
