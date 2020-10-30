@@ -282,7 +282,7 @@ window.addEventListener("orientationchange", function() {
           canvas: function() {
             var e = document.getElementById("canvas");
             return window.addEventListener("resize", (function(t) {
-              Module.canvas.style.width = document.body.clientWidth + "px", Module.canvas.style.height = document.body.clientHeight + "px"
+              Module.canvas.style.width = document.getElementById("canvas").clientWidth + "px", Module.canvas.style.height = document.getElementById("canvas").clientHeight + "px"
             }), !0), e.addEventListener("webglcontextlost", (function(e) {
               alert("WebGL context lost. You will need to reload the page."), e.preventDefault()
             }), !1), e
