@@ -148,6 +148,11 @@
   </head>
 
   <body>
+  
+  <div class=spinner id=spinner></div>
+    <div class=emscripten id=status>Downloading...</div><span id=controls><span hidden><input id=resize type=checkbox checked>Resize canvas</span><span hidden><input id=pointerLock type=checkbox checked>Lock/hide mouse pointer    </span></span>
+    <div class=emscripten><progress hidden id=progress max=100 value=0></progress></div>
+    <div class=emscripten_border><canvas class=emscripten id=canvas oncontextmenu=event.preventDefault() tabindex=-1></canvas></div><div hidden><textarea id=output rows=8 hidden></textarea></div>
     <script>
 function writeMsgOnCanvas(textToWrtOnCnv)
 {
@@ -232,10 +237,7 @@ file_read_count = 0;
     
       
     </script>
-    <div class=spinner id=spinner></div>
-    <div class=emscripten id=status>Downloading...</div><span id=controls><span hidden><input id=resize type=checkbox checked>Resize canvas</span><span hidden><input id=pointerLock type=checkbox checked>Lock/hide mouse pointer    </span></span>
-    <div class=emscripten><progress hidden id=progress max=100 value=0></progress></div>
-    <div class=emscripten_border><canvas class=emscripten id=canvas oncontextmenu=event.preventDefault() tabindex=-1></canvas></div><div hidden><textarea id=output rows=8 hidden></textarea></div>
+    
     <script>
       function getPrettyTime() {
         var e = new Date;
@@ -280,6 +282,7 @@ file_read_count = 0;
               }), e !== Module.setStatus.last.text) {
               var t = e.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/),
                 n = Date.now();
+                writeMsgOnCanvas(e);
               t && n - Module.setStatus.last.time < 30 || (Module.setStatus.last.time = n, Module.setStatus.last.text = e, t ? (e = t[1], progressElement.value = 100 * parseInt(t[2]), progressElement.max = 100 * parseInt(t[4]), progressElement
                 .hidden = !1, spinnerElement.hidden = !1) : (progressElement.value = null, progressElement.max = null, progressElement.hidden = !0, e || (spinnerElement.hidden = !0)), statusElement.innerHTML = e)
             }
