@@ -50,6 +50,22 @@
         border: 0 none;
         background-color: #000
       }
+      
+      #textmsgs {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        margin: 0px;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        display: block;
+        min-height: 640px;
+        min-width: 360px;
+        border: 0 none;
+        color: #787878;
+        z-index: 1000;
+      }
 
       .spinner {
         height: 50px;
@@ -153,21 +169,12 @@
     <div class=emscripten id=status>Downloading...</div><span id=controls><span hidden><input id=resize type=checkbox checked>Resize canvas</span><span hidden><input id=pointerLock type=checkbox checked>Lock/hide mouse pointer    </span></span>
     <div class=emscripten><progress hidden id=progress max=100 value=0></progress></div>
     <div class=emscripten_border><canvas class=emscripten id=canvas oncontextmenu=event.preventDefault() tabindex=-1></canvas></div><div hidden><textarea id=output rows=8 hidden></textarea></div>
+    <div id=textmsgs></div>
     <script>
 function writeMsgOnCanvas(textToWrtOnCnv)
 {
-  var c = document.getElementById('canvas');
-  var ctx = c.getContext('2d');
-
-  ctx.fillStyle = '#000000';
-  ctx.fillRect(0, 0, c.width, c.height);
-
-  ctx.fillStyle = '#aaaaaa';
-  ctx.font = "bold 24px verdana, sans-serif";
-  ctx.textBaseline = 'middle'; 
-  ctx.textAlign = 'center'; 
-
-  ctx.fillText(textToWrtOnCnv, c.width/2, c.height/2);
+  var txtmsg = document.getElementById("textmsgs");
+  txmsg.innerHTML = textToWrtOnCnv;
 }
 
 
@@ -199,6 +206,7 @@ oReq.onload = function (oEvent)
               
     if(file_read_count == file_total_count)
     {
+       writeMsgOnCanvas("");
        Module.callMain(['/' + game_file , '--windowed']);
     }
     else
