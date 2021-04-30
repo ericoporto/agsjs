@@ -614,10 +614,10 @@ function createWasm() {
     var exports = instance.exports;
     exports = Asyncify.instrumentWasmExports(exports);
     Module["asm"] = exports;
-    wasmMemory = Module["asm"]["cf"];
+    wasmMemory = Module["asm"]["gf"];
     updateGlobalBufferAndViews(wasmMemory.buffer);
-    wasmTable = Module["asm"]["ff"];
-    addOnInit(Module["asm"]["df"]);
+    wasmTable = Module["asm"]["kf"];
+    addOnInit(Module["asm"]["hf"]);
     removeRunDependency("wasm-instantiate")
   }
   addRunDependency("wasm-instantiate");
@@ -668,7 +668,7 @@ function createWasm() {
 var tempDouble;
 var tempI64;
 var ASM_CONSTS = {
-  366283: function($0) {
+  380971: function($0) {
     var str = UTF8ToString($0) + "\n\n" + "Abort/Retry/Ignore/AlwaysIgnore? [ariA] :";
     var reply = window.prompt(str, "i");
     if (reply === null) {
@@ -676,20 +676,20 @@ var ASM_CONSTS = {
     }
     return allocate(intArrayFromString(reply), "i8", ALLOC_NORMAL)
   },
-  366508: function($0, $1, $2, $3, $4) {
+  381196: function($0, $1, $2, $3, $4) {
     return Browser.safeSetTimeout(function() {
       dynCall("viiii", $0, [$1, $2, $3, $4])
     }, $2)
   },
-  366603: function($0) {
+  381291: function($0) {
     window.clearTimeout($0)
   },
-  366632: function($0, $1, $2, $3, $4) {
+  381320: function($0, $1, $2, $3, $4) {
     return Browser.safeSetTimeout(function() {
       dynCall("viiii", $0, [$1, $2, $3, $4])
     }, $2)
   },
-  366727: function($0, $1, $2) {
+  381415: function($0, $1, $2) {
     var w = $0;
     var h = $1;
     var pixels = $2;
@@ -760,7 +760,7 @@ var ASM_CONSTS = {
     SDL2.ctx.putImageData(SDL2.image, 0, 0);
     return 0
   },
-  368182: function($0, $1, $2, $3, $4) {
+  382870: function($0, $1, $2, $3, $4) {
     var w = $0;
     var h = $1;
     var hot_x = $2;
@@ -797,36 +797,36 @@ var ASM_CONSTS = {
     stringToUTF8(url, urlBuf, url.length + 1);
     return urlBuf
   },
-  369171: function($0) {
+  383859: function($0) {
     if (Module["canvas"]) {
       Module["canvas"].style["cursor"] = UTF8ToString($0)
     }
     return 0
   },
-  369264: function() {
+  383952: function() {
     if (Module["canvas"]) {
       Module["canvas"].style["cursor"] = "none"
     }
   },
-  369333: function() {
+  384021: function() {
     return screen.width
   },
-  369358: function() {
+  384046: function() {
     return screen.height
   },
-  369384: function() {
+  384072: function() {
     return window.innerWidth
   },
-  369414: function() {
+  384102: function() {
     return window.innerHeight
   },
-  369445: function($0) {
+  384133: function($0) {
     if (typeof setWindowTitle !== "undefined") {
       setWindowTitle(UTF8ToString($0))
     }
     return 0
   },
-  369540: function() {
+  384228: function() {
     if (typeof AudioContext !== "undefined") {
       return 1
     } else if (typeof webkitAudioContext !== "undefined") {
@@ -834,7 +834,7 @@ var ASM_CONSTS = {
     }
     return 0
   },
-  369677: function() {
+  384365: function() {
     if (typeof navigator.mediaDevices !== "undefined" && typeof navigator.mediaDevices.getUserMedia !== "undefined") {
       return 1
     } else if (typeof navigator.webkitGetUserMedia !== "undefined") {
@@ -842,7 +842,7 @@ var ASM_CONSTS = {
     }
     return 0
   },
-  369901: function($0) {
+  384589: function($0) {
     if (typeof Module["SDL2"] === "undefined") {
       Module["SDL2"] = {}
     }
@@ -864,11 +864,11 @@ var ASM_CONSTS = {
     }
     return SDL2.audioContext === undefined ? -1 : 0
   },
-  370394: function() {
+  385082: function() {
     var SDL2 = Module["SDL2"];
     return SDL2.audioContext.sampleRate
   },
-  370462: function($0, $1, $2, $3) {
+  385150: function($0, $1, $2, $3) {
     var SDL2 = Module["SDL2"];
     var have_microphone = function(stream) {
       if (SDL2.capture.silenceTimer !== undefined) {
@@ -909,7 +909,7 @@ var ASM_CONSTS = {
       }, have_microphone, no_microphone)
     }
   },
-  372114: function($0, $1, $2, $3) {
+  386802: function($0, $1, $2, $3) {
     var SDL2 = Module["SDL2"];
     SDL2.audio.scriptProcessorNode = SDL2.audioContext["createScriptProcessor"]($1, 0, $0);
     SDL2.audio.scriptProcessorNode["onaudioprocess"] = function(e) {
@@ -921,7 +921,7 @@ var ASM_CONSTS = {
     };
     SDL2.audio.scriptProcessorNode["connect"](SDL2.audioContext["destination"])
   },
-  372524: function($0, $1) {
+  387212: function($0, $1) {
     var SDL2 = Module["SDL2"];
     var numChannels = SDL2.capture.currentCaptureBuffer.numberOfChannels;
     for (var c = 0; c < numChannels; ++c) {
@@ -940,7 +940,7 @@ var ASM_CONSTS = {
       }
     }
   },
-  373129: function($0, $1) {
+  387817: function($0, $1) {
     var SDL2 = Module["SDL2"];
     var numChannels = SDL2.audio.currentOutputBuffer["numberOfChannels"];
     for (var c = 0; c < numChannels; ++c) {
@@ -953,7 +953,7 @@ var ASM_CONSTS = {
       }
     }
   },
-  373609: function($0) {
+  388297: function($0) {
     var SDL2 = Module["SDL2"];
     if ($0) {
       if (SDL2.capture.silenceTimer !== undefined) {
@@ -4161,6 +4161,16 @@ function ___sys_fcntl64(fd, cmd, varargs) {
   }
 }
 
+function ___sys_fstat64(fd, buf) {
+  try {
+    var stream = SYSCALLS.getStreamFromFD(fd);
+    return SYSCALLS.doStat(FS.stat, stream.path, buf)
+  } catch (e) {
+    if (typeof FS === "undefined" || !(e instanceof FS.ErrnoError)) abort(e);
+    return -e.errno
+  }
+}
+
 function ___sys_getcwd(buf, size) {
   try {
     if (size === 0) return -28;
@@ -4267,6 +4277,77 @@ function ___sys_mkdir(path, mode) {
   try {
     path = SYSCALLS.getStr(path);
     return SYSCALLS.doMkdir(path, mode)
+  } catch (e) {
+    if (typeof FS === "undefined" || !(e instanceof FS.ErrnoError)) abort(e);
+    return -e.errno
+  }
+}
+
+function syscallMmap2(addr, len, prot, flags, fd, off) {
+  off <<= 12;
+  var ptr;
+  var allocated = false;
+  if ((flags & 16) !== 0 && addr % 16384 !== 0) {
+    return -28
+  }
+  if ((flags & 32) !== 0) {
+    ptr = _memalign(16384, len);
+    if (!ptr) return -48;
+    _memset(ptr, 0, len);
+    allocated = true
+  } else {
+    var info = FS.getStream(fd);
+    if (!info) return -8;
+    var res = FS.mmap(info, addr, len, off, prot, flags);
+    ptr = res.ptr;
+    allocated = res.allocated
+  }
+  SYSCALLS.mappings[ptr] = {
+    malloc: ptr,
+    len: len,
+    allocated: allocated,
+    fd: fd,
+    prot: prot,
+    flags: flags,
+    offset: off
+  };
+  return ptr
+}
+
+function ___sys_mmap2(addr, len, prot, flags, fd, off) {
+  try {
+    return syscallMmap2(addr, len, prot, flags, fd, off)
+  } catch (e) {
+    if (typeof FS === "undefined" || !(e instanceof FS.ErrnoError)) abort(e);
+    return -e.errno
+  }
+}
+
+function syscallMunmap(addr, len) {
+  if ((addr | 0) === -1 || len === 0) {
+    return -28
+  }
+  var info = SYSCALLS.mappings[addr];
+  if (!info) return 0;
+  if (len === info.len) {
+    var stream = FS.getStream(info.fd);
+    if (stream) {
+      if (info.prot & 2) {
+        SYSCALLS.doMsync(addr, stream, len, info.flags, info.offset)
+      }
+      FS.munmap(stream)
+    }
+    SYSCALLS.mappings[addr] = null;
+    if (info.allocated) {
+      _free(info.malloc)
+    }
+  }
+  return 0
+}
+
+function ___sys_munmap(addr, len) {
+  try {
+    return syscallMunmap(addr, len)
   } catch (e) {
     if (typeof FS === "undefined" || !(e instanceof FS.ErrnoError)) abort(e);
     return -e.errno
@@ -10325,6 +10406,18 @@ function _fd_close(fd) {
   }
 }
 
+function _fd_fdstat_get(fd, pbuf) {
+  try {
+    var stream = SYSCALLS.getStreamFromFD(fd);
+    var type = stream.tty ? 2 : FS.isDir(stream.mode) ? 3 : FS.isLink(stream.mode) ? 7 : 4;
+    HEAP8[pbuf >> 0] = type;
+    return 0
+  } catch (e) {
+    if (typeof FS === "undefined" || !(e instanceof FS.ErrnoError)) abort(e);
+    return e.errno
+  }
+}
+
 function _fd_read(fd, iov, iovcnt, pnum) {
   try {
     var stream = SYSCALLS.getStreamFromFD(fd);
@@ -10676,295 +10769,299 @@ var asmLibraryArg = {
   "r": ___cxa_allocate_exception,
   "n": ___cxa_atexit,
   "C": ___cxa_begin_catch,
-  "Ib": ___cxa_current_primary_exception,
-  "da": ___cxa_decrement_exception_refcount,
-  "D": ___cxa_end_catch,
+  "Jb": ___cxa_current_primary_exception,
+  "ea": ___cxa_decrement_exception_refcount,
+  "E": ___cxa_end_catch,
   "c": ___cxa_find_matching_catch_2,
   "o": ___cxa_find_matching_catch_3,
   "z": ___cxa_free_exception,
-  "ab": ___cxa_get_exception_ptr,
-  "ca": ___cxa_increment_exception_refcount,
-  "Hb": ___cxa_rethrow_primary_exception,
+  "bb": ___cxa_get_exception_ptr,
+  "da": ___cxa_increment_exception_refcount,
+  "Ib": ___cxa_rethrow_primary_exception,
   "x": ___cxa_throw,
-  "Mb": ___localtime_r,
+  "Ob": ___localtime_r,
   "f": ___resumeException,
-  "Ob": ___sys_chdir,
-  "ga": ___sys_fcntl64,
-  "Pb": ___sys_getcwd,
-  "Nb": ___sys_getdents64,
-  "Qb": ___sys_ioctl,
-  "Ub": ___sys_mkdir,
+  "Qb": ___sys_chdir,
+  "U": ___sys_fcntl64,
+  "Zb": ___sys_fstat64,
+  "Rb": ___sys_getcwd,
+  "Pb": ___sys_getdents64,
+  "Ub": ___sys_ioctl,
+  "Yb": ___sys_mkdir,
+  "Sb": ___sys_mmap2,
+  "Tb": ___sys_munmap,
   "ha": ___sys_open,
-  "Rb": ___sys_rename,
-  "Sb": ___sys_rmdir,
-  "Vb": ___sys_stat64,
-  "Tb": ___sys_unlink,
-  "$a": _abort,
-  "eb": _alBufferData,
-  "fb": _alGenBuffers,
-  "ob": _alGenSources,
+  "Vb": ___sys_rename,
+  "Wb": ___sys_rmdir,
+  "ia": ___sys_stat64,
+  "Xb": ___sys_unlink,
+  "ab": _abort,
+  "fb": _alBufferData,
+  "gb": _alGenBuffers,
+  "pb": _alGenSources,
   "N": _alGetBufferi,
-  "hb": _alGetEnumValue,
+  "ib": _alGetEnumValue,
   "q": _alGetError,
-  "bb": _alGetSourcef,
+  "cb": _alGetSourcef,
   "J": _alGetSourcei,
   "v": _alGetString,
-  "ib": _alIsExtensionPresent,
-  "mb": _alListenerf,
-  "kb": _alSource3f,
-  "cb": _alSourcePause,
-  "_": _alSourcePlay,
-  "db": _alSourceQueueBuffers,
-  "Z": _alSourceStop,
-  "gb": _alSourceUnqueueBuffers,
+  "jb": _alIsExtensionPresent,
+  "nb": _alListenerf,
+  "lb": _alSource3f,
+  "db": _alSourcePause,
+  "$": _alSourcePlay,
+  "eb": _alSourceQueueBuffers,
+  "_": _alSourceStop,
+  "hb": _alSourceUnqueueBuffers,
   "T": _alSourcef,
-  "lb": _alSourcei,
-  "pb": _alcCloseDevice,
-  "tb": _alcCreateContext,
-  "qb": _alcDestroyContext,
-  "rb": _alcGetError,
-  "$": _alcGetString,
-  "sb": _alcIsExtensionPresent,
-  "aa": _alcMakeContextCurrent,
-  "ub": _alcOpenDevice,
-  "af": _atexit,
-  "H": _clock_gettime,
+  "mb": _alSourcei,
+  "qb": _alcCloseDevice,
+  "ub": _alcCreateContext,
+  "rb": _alcDestroyContext,
+  "sb": _alcGetError,
+  "aa": _alcGetString,
+  "tb": _alcIsExtensionPresent,
+  "ba": _alcMakeContextCurrent,
+  "vb": _alcOpenDevice,
+  "ef": _atexit,
+  "I": _clock_gettime,
   "M": _dlclose,
-  "Y": _dlsym,
-  "$b": do_resize_after_time,
-  "Sa": _eglBindAPI,
-  "Va": _eglChooseConfig,
-  "Ja": _eglCreateContext,
-  "La": _eglCreateWindowSurface,
-  "Ka": _eglDestroyContext,
-  "Ma": _eglDestroySurface,
-  "Wa": _eglGetConfigAttrib,
-  "X": _eglGetDisplay,
-  "Ia": _eglGetError,
-  "Ta": _eglInitialize,
-  "Na": _eglMakeCurrent,
-  "Ha": _eglQueryString,
-  "Oa": _eglSwapBuffers,
-  "Pa": _eglSwapInterval,
-  "Ua": _eglTerminate,
-  "Ra": _eglWaitGL,
-  "Qa": _eglWaitNative,
+  "Z": _dlsym,
+  "dc": do_resize_after_time,
+  "Ta": _eglBindAPI,
+  "Wa": _eglChooseConfig,
+  "Ka": _eglCreateContext,
+  "Ma": _eglCreateWindowSurface,
+  "La": _eglDestroyContext,
+  "Na": _eglDestroySurface,
+  "Xa": _eglGetConfigAttrib,
+  "Y": _eglGetDisplay,
+  "Ja": _eglGetError,
+  "Ua": _eglInitialize,
+  "Oa": _eglMakeCurrent,
+  "Ia": _eglQueryString,
+  "Pa": _eglSwapBuffers,
+  "Qa": _eglSwapInterval,
+  "Va": _eglTerminate,
+  "Sa": _eglWaitGL,
+  "Ra": _eglWaitNative,
   "s": _emscripten_asm_const_int,
-  "_e": _emscripten_exit_fullscreen,
-  "bf": _emscripten_exit_pointerlock,
+  "cf": _emscripten_exit_fullscreen,
+  "ff": _emscripten_exit_pointerlock,
   "Q": _emscripten_get_device_pixel_ratio,
-  "E": _emscripten_get_element_css_size,
-  "la": _emscripten_get_gamepad_status,
-  "Ze": _emscripten_get_num_gamepads,
-  "Fe": _emscripten_glActiveTexture,
-  "Ee": _emscripten_glAttachShader,
-  "Ve": _emscripten_glBeginQueryEXT,
-  "De": _emscripten_glBindAttribLocation,
-  "Ce": _emscripten_glBindBuffer,
-  "Be": _emscripten_glBindFramebuffer,
-  "Ae": _emscripten_glBindRenderbuffer,
-  "ze": _emscripten_glBindTexture,
-  "Ne": _emscripten_glBindVertexArrayOES,
-  "ye": _emscripten_glBlendColor,
-  "xe": _emscripten_glBlendEquation,
-  "we": _emscripten_glBlendEquationSeparate,
-  "ve": _emscripten_glBlendFunc,
-  "ue": _emscripten_glBlendFuncSeparate,
-  "te": _emscripten_glBufferData,
-  "se": _emscripten_glBufferSubData,
-  "re": _emscripten_glCheckFramebufferStatus,
-  "qe": _emscripten_glClear,
-  "pe": _emscripten_glClearColor,
-  "oe": _emscripten_glClearDepthf,
-  "ne": _emscripten_glClearStencil,
-  "me": _emscripten_glColorMask,
-  "le": _emscripten_glCompileShader,
-  "ke": _emscripten_glCompressedTexImage2D,
-  "je": _emscripten_glCompressedTexSubImage2D,
-  "ie": _emscripten_glCopyTexImage2D,
-  "he": _emscripten_glCopyTexSubImage2D,
-  "ge": _emscripten_glCreateProgram,
-  "fe": _emscripten_glCreateShader,
-  "de": _emscripten_glCullFace,
-  "ce": _emscripten_glDeleteBuffers,
-  "be": _emscripten_glDeleteFramebuffers,
-  "ae": _emscripten_glDeleteProgram,
-  "Xe": _emscripten_glDeleteQueriesEXT,
-  "$d": _emscripten_glDeleteRenderbuffers,
-  "_d": _emscripten_glDeleteShader,
-  "Zd": _emscripten_glDeleteTextures,
-  "Me": _emscripten_glDeleteVertexArraysOES,
-  "Yd": _emscripten_glDepthFunc,
-  "Xd": _emscripten_glDepthMask,
-  "Wd": _emscripten_glDepthRangef,
-  "Vd": _emscripten_glDetachShader,
-  "Ud": _emscripten_glDisable,
-  "Td": _emscripten_glDisableVertexAttribArray,
-  "Sd": _emscripten_glDrawArrays,
-  "Ie": _emscripten_glDrawArraysInstancedANGLE,
-  "Je": _emscripten_glDrawBuffersWEBGL,
-  "Rd": _emscripten_glDrawElements,
-  "He": _emscripten_glDrawElementsInstancedANGLE,
-  "Qd": _emscripten_glEnable,
-  "Pd": _emscripten_glEnableVertexAttribArray,
-  "Ue": _emscripten_glEndQueryEXT,
-  "Od": _emscripten_glFinish,
-  "Nd": _emscripten_glFlush,
-  "Md": _emscripten_glFramebufferRenderbuffer,
-  "Ld": _emscripten_glFramebufferTexture2D,
-  "Kd": _emscripten_glFrontFace,
-  "Jd": _emscripten_glGenBuffers,
-  "Hd": _emscripten_glGenFramebuffers,
-  "Ye": _emscripten_glGenQueriesEXT,
-  "Gd": _emscripten_glGenRenderbuffers,
-  "Fd": _emscripten_glGenTextures,
-  "Le": _emscripten_glGenVertexArraysOES,
-  "Id": _emscripten_glGenerateMipmap,
-  "Ed": _emscripten_glGetActiveAttrib,
-  "Dd": _emscripten_glGetActiveUniform,
-  "Cd": _emscripten_glGetAttachedShaders,
-  "Bd": _emscripten_glGetAttribLocation,
-  "Ad": _emscripten_glGetBooleanv,
-  "zd": _emscripten_glGetBufferParameteriv,
-  "yd": _emscripten_glGetError,
-  "xd": _emscripten_glGetFloatv,
-  "wd": _emscripten_glGetFramebufferAttachmentParameteriv,
-  "vd": _emscripten_glGetIntegerv,
-  "td": _emscripten_glGetProgramInfoLog,
-  "ud": _emscripten_glGetProgramiv,
-  "Pe": _emscripten_glGetQueryObjecti64vEXT,
-  "Re": _emscripten_glGetQueryObjectivEXT,
-  "Oe": _emscripten_glGetQueryObjectui64vEXT,
-  "Qe": _emscripten_glGetQueryObjectuivEXT,
-  "Se": _emscripten_glGetQueryivEXT,
-  "sd": _emscripten_glGetRenderbufferParameteriv,
-  "qd": _emscripten_glGetShaderInfoLog,
-  "pd": _emscripten_glGetShaderPrecisionFormat,
-  "od": _emscripten_glGetShaderSource,
-  "rd": _emscripten_glGetShaderiv,
-  "nd": _emscripten_glGetString,
-  "md": _emscripten_glGetTexParameterfv,
-  "ld": _emscripten_glGetTexParameteriv,
-  "id": _emscripten_glGetUniformLocation,
-  "kd": _emscripten_glGetUniformfv,
-  "jd": _emscripten_glGetUniformiv,
-  "fd": _emscripten_glGetVertexAttribPointerv,
-  "hd": _emscripten_glGetVertexAttribfv,
-  "gd": _emscripten_glGetVertexAttribiv,
-  "ed": _emscripten_glHint,
-  "dd": _emscripten_glIsBuffer,
-  "cd": _emscripten_glIsEnabled,
-  "bd": _emscripten_glIsFramebuffer,
-  "ad": _emscripten_glIsProgram,
-  "We": _emscripten_glIsQueryEXT,
-  "$c": _emscripten_glIsRenderbuffer,
-  "_c": _emscripten_glIsShader,
-  "Zc": _emscripten_glIsTexture,
-  "Ke": _emscripten_glIsVertexArrayOES,
-  "Yc": _emscripten_glLineWidth,
-  "Xc": _emscripten_glLinkProgram,
-  "Wc": _emscripten_glPixelStorei,
-  "Vc": _emscripten_glPolygonOffset,
-  "Te": _emscripten_glQueryCounterEXT,
-  "Uc": _emscripten_glReadPixels,
-  "Tc": _emscripten_glReleaseShaderCompiler,
-  "Sc": _emscripten_glRenderbufferStorage,
-  "Rc": _emscripten_glSampleCoverage,
-  "Qc": _emscripten_glScissor,
-  "Pc": _emscripten_glShaderBinary,
-  "Oc": _emscripten_glShaderSource,
-  "Nc": _emscripten_glStencilFunc,
-  "Mc": _emscripten_glStencilFuncSeparate,
-  "Lc": _emscripten_glStencilMask,
-  "Kc": _emscripten_glStencilMaskSeparate,
-  "Jc": _emscripten_glStencilOp,
-  "Ic": _emscripten_glStencilOpSeparate,
-  "Hc": _emscripten_glTexImage2D,
-  "Gc": _emscripten_glTexParameterf,
-  "Fc": _emscripten_glTexParameterfv,
-  "Ec": _emscripten_glTexParameteri,
-  "Dc": _emscripten_glTexParameteriv,
-  "Cc": _emscripten_glTexSubImage2D,
-  "Bc": _emscripten_glUniform1f,
-  "Ac": _emscripten_glUniform1fv,
-  "zc": _emscripten_glUniform1i,
-  "yc": _emscripten_glUniform1iv,
-  "xc": _emscripten_glUniform2f,
-  "wc": _emscripten_glUniform2fv,
-  "uc": _emscripten_glUniform2i,
-  "tc": _emscripten_glUniform2iv,
-  "sc": _emscripten_glUniform3f,
-  "rc": _emscripten_glUniform3fv,
-  "qc": _emscripten_glUniform3i,
-  "pc": _emscripten_glUniform3iv,
-  "oc": _emscripten_glUniform4f,
-  "nc": _emscripten_glUniform4fv,
-  "mc": _emscripten_glUniform4i,
-  "lc": _emscripten_glUniform4iv,
-  "jc": _emscripten_glUniformMatrix2fv,
-  "ic": _emscripten_glUniformMatrix3fv,
-  "hc": _emscripten_glUniformMatrix4fv,
-  "gc": _emscripten_glUseProgram,
-  "fc": _emscripten_glValidateProgram,
-  "ec": _emscripten_glVertexAttrib1f,
-  "dc": _emscripten_glVertexAttrib1fv,
-  "cc": _emscripten_glVertexAttrib2f,
-  "bc": _emscripten_glVertexAttrib2fv,
-  "ac": _emscripten_glVertexAttrib3f,
-  "_b": _emscripten_glVertexAttrib3fv,
-  "Zb": _emscripten_glVertexAttrib4f,
-  "Yb": _emscripten_glVertexAttrib4fv,
-  "Ge": _emscripten_glVertexAttribDivisorANGLE,
-  "Xb": _emscripten_glVertexAttribPointer,
-  "Wb": _emscripten_glViewport,
+  "F": _emscripten_get_element_css_size,
+  "ma": _emscripten_get_gamepad_status,
+  "bf": _emscripten_get_num_gamepads,
+  "Je": _emscripten_glActiveTexture,
+  "Ie": _emscripten_glAttachShader,
+  "Ze": _emscripten_glBeginQueryEXT,
+  "He": _emscripten_glBindAttribLocation,
+  "Ge": _emscripten_glBindBuffer,
+  "Fe": _emscripten_glBindFramebuffer,
+  "Ee": _emscripten_glBindRenderbuffer,
+  "De": _emscripten_glBindTexture,
+  "Re": _emscripten_glBindVertexArrayOES,
+  "Ce": _emscripten_glBlendColor,
+  "Be": _emscripten_glBlendEquation,
+  "Ae": _emscripten_glBlendEquationSeparate,
+  "ze": _emscripten_glBlendFunc,
+  "ye": _emscripten_glBlendFuncSeparate,
+  "xe": _emscripten_glBufferData,
+  "we": _emscripten_glBufferSubData,
+  "ve": _emscripten_glCheckFramebufferStatus,
+  "ue": _emscripten_glClear,
+  "te": _emscripten_glClearColor,
+  "se": _emscripten_glClearDepthf,
+  "re": _emscripten_glClearStencil,
+  "qe": _emscripten_glColorMask,
+  "pe": _emscripten_glCompileShader,
+  "oe": _emscripten_glCompressedTexImage2D,
+  "ne": _emscripten_glCompressedTexSubImage2D,
+  "me": _emscripten_glCopyTexImage2D,
+  "le": _emscripten_glCopyTexSubImage2D,
+  "ke": _emscripten_glCreateProgram,
+  "je": _emscripten_glCreateShader,
+  "he": _emscripten_glCullFace,
+  "ge": _emscripten_glDeleteBuffers,
+  "fe": _emscripten_glDeleteFramebuffers,
+  "ee": _emscripten_glDeleteProgram,
+  "$e": _emscripten_glDeleteQueriesEXT,
+  "de": _emscripten_glDeleteRenderbuffers,
+  "ce": _emscripten_glDeleteShader,
+  "be": _emscripten_glDeleteTextures,
+  "Qe": _emscripten_glDeleteVertexArraysOES,
+  "ae": _emscripten_glDepthFunc,
+  "$d": _emscripten_glDepthMask,
+  "_d": _emscripten_glDepthRangef,
+  "Zd": _emscripten_glDetachShader,
+  "Yd": _emscripten_glDisable,
+  "Xd": _emscripten_glDisableVertexAttribArray,
+  "Wd": _emscripten_glDrawArrays,
+  "Me": _emscripten_glDrawArraysInstancedANGLE,
+  "Ne": _emscripten_glDrawBuffersWEBGL,
+  "Vd": _emscripten_glDrawElements,
+  "Le": _emscripten_glDrawElementsInstancedANGLE,
+  "Ud": _emscripten_glEnable,
+  "Td": _emscripten_glEnableVertexAttribArray,
+  "Ye": _emscripten_glEndQueryEXT,
+  "Sd": _emscripten_glFinish,
+  "Rd": _emscripten_glFlush,
+  "Qd": _emscripten_glFramebufferRenderbuffer,
+  "Pd": _emscripten_glFramebufferTexture2D,
+  "Od": _emscripten_glFrontFace,
+  "Nd": _emscripten_glGenBuffers,
+  "Ld": _emscripten_glGenFramebuffers,
+  "af": _emscripten_glGenQueriesEXT,
+  "Kd": _emscripten_glGenRenderbuffers,
+  "Jd": _emscripten_glGenTextures,
+  "Pe": _emscripten_glGenVertexArraysOES,
+  "Md": _emscripten_glGenerateMipmap,
+  "Id": _emscripten_glGetActiveAttrib,
+  "Hd": _emscripten_glGetActiveUniform,
+  "Gd": _emscripten_glGetAttachedShaders,
+  "Fd": _emscripten_glGetAttribLocation,
+  "Ed": _emscripten_glGetBooleanv,
+  "Dd": _emscripten_glGetBufferParameteriv,
+  "Cd": _emscripten_glGetError,
+  "Bd": _emscripten_glGetFloatv,
+  "Ad": _emscripten_glGetFramebufferAttachmentParameteriv,
+  "zd": _emscripten_glGetIntegerv,
+  "xd": _emscripten_glGetProgramInfoLog,
+  "yd": _emscripten_glGetProgramiv,
+  "Te": _emscripten_glGetQueryObjecti64vEXT,
+  "Ve": _emscripten_glGetQueryObjectivEXT,
+  "Se": _emscripten_glGetQueryObjectui64vEXT,
+  "Ue": _emscripten_glGetQueryObjectuivEXT,
+  "We": _emscripten_glGetQueryivEXT,
+  "wd": _emscripten_glGetRenderbufferParameteriv,
+  "ud": _emscripten_glGetShaderInfoLog,
+  "td": _emscripten_glGetShaderPrecisionFormat,
+  "sd": _emscripten_glGetShaderSource,
+  "vd": _emscripten_glGetShaderiv,
+  "rd": _emscripten_glGetString,
+  "qd": _emscripten_glGetTexParameterfv,
+  "pd": _emscripten_glGetTexParameteriv,
+  "md": _emscripten_glGetUniformLocation,
+  "od": _emscripten_glGetUniformfv,
+  "nd": _emscripten_glGetUniformiv,
+  "jd": _emscripten_glGetVertexAttribPointerv,
+  "ld": _emscripten_glGetVertexAttribfv,
+  "kd": _emscripten_glGetVertexAttribiv,
+  "id": _emscripten_glHint,
+  "hd": _emscripten_glIsBuffer,
+  "gd": _emscripten_glIsEnabled,
+  "fd": _emscripten_glIsFramebuffer,
+  "ed": _emscripten_glIsProgram,
+  "_e": _emscripten_glIsQueryEXT,
+  "dd": _emscripten_glIsRenderbuffer,
+  "cd": _emscripten_glIsShader,
+  "bd": _emscripten_glIsTexture,
+  "Oe": _emscripten_glIsVertexArrayOES,
+  "ad": _emscripten_glLineWidth,
+  "$c": _emscripten_glLinkProgram,
+  "_c": _emscripten_glPixelStorei,
+  "Zc": _emscripten_glPolygonOffset,
+  "Xe": _emscripten_glQueryCounterEXT,
+  "Yc": _emscripten_glReadPixels,
+  "Xc": _emscripten_glReleaseShaderCompiler,
+  "Wc": _emscripten_glRenderbufferStorage,
+  "Vc": _emscripten_glSampleCoverage,
+  "Uc": _emscripten_glScissor,
+  "Tc": _emscripten_glShaderBinary,
+  "Sc": _emscripten_glShaderSource,
+  "Rc": _emscripten_glStencilFunc,
+  "Qc": _emscripten_glStencilFuncSeparate,
+  "Pc": _emscripten_glStencilMask,
+  "Oc": _emscripten_glStencilMaskSeparate,
+  "Nc": _emscripten_glStencilOp,
+  "Mc": _emscripten_glStencilOpSeparate,
+  "Lc": _emscripten_glTexImage2D,
+  "Kc": _emscripten_glTexParameterf,
+  "Jc": _emscripten_glTexParameterfv,
+  "Ic": _emscripten_glTexParameteri,
+  "Hc": _emscripten_glTexParameteriv,
+  "Gc": _emscripten_glTexSubImage2D,
+  "Fc": _emscripten_glUniform1f,
+  "Ec": _emscripten_glUniform1fv,
+  "Dc": _emscripten_glUniform1i,
+  "Cc": _emscripten_glUniform1iv,
+  "Bc": _emscripten_glUniform2f,
+  "Ac": _emscripten_glUniform2fv,
+  "yc": _emscripten_glUniform2i,
+  "xc": _emscripten_glUniform2iv,
+  "wc": _emscripten_glUniform3f,
+  "vc": _emscripten_glUniform3fv,
+  "uc": _emscripten_glUniform3i,
+  "tc": _emscripten_glUniform3iv,
+  "sc": _emscripten_glUniform4f,
+  "rc": _emscripten_glUniform4fv,
+  "qc": _emscripten_glUniform4i,
+  "pc": _emscripten_glUniform4iv,
+  "nc": _emscripten_glUniformMatrix2fv,
+  "mc": _emscripten_glUniformMatrix3fv,
+  "lc": _emscripten_glUniformMatrix4fv,
+  "kc": _emscripten_glUseProgram,
+  "jc": _emscripten_glValidateProgram,
+  "ic": _emscripten_glVertexAttrib1f,
+  "hc": _emscripten_glVertexAttrib1fv,
+  "gc": _emscripten_glVertexAttrib2f,
+  "fc": _emscripten_glVertexAttrib2fv,
+  "ec": _emscripten_glVertexAttrib3f,
+  "cc": _emscripten_glVertexAttrib3fv,
+  "bc": _emscripten_glVertexAttrib4f,
+  "ac": _emscripten_glVertexAttrib4fv,
+  "Ke": _emscripten_glVertexAttribDivisorANGLE,
+  "$b": _emscripten_glVertexAttribPointer,
+  "_b": _emscripten_glViewport,
   "S": _emscripten_has_asyncify,
-  "I": _emscripten_longjmp,
-  "Fb": _emscripten_memcpy_big,
-  "$e": _emscripten_request_fullscreen_strategy,
-  "W": _emscripten_request_pointerlock,
-  "Gb": _emscripten_resize_heap,
-  "ma": _emscripten_sample_gamepad_data,
-  "na": _emscripten_set_beforeunload_callback_on_thread,
-  "za": _emscripten_set_blur_callback_on_thread,
+  "D": _emscripten_longjmp,
+  "Gb": _emscripten_memcpy_big,
+  "df": _emscripten_request_fullscreen_strategy,
+  "X": _emscripten_request_pointerlock,
+  "Hb": _emscripten_resize_heap,
+  "na": _emscripten_sample_gamepad_data,
+  "oa": _emscripten_set_beforeunload_callback_on_thread,
+  "Aa": _emscripten_set_blur_callback_on_thread,
   "L": _emscripten_set_canvas_element_size,
-  "V": _emscripten_set_element_css_size,
-  "Aa": _emscripten_set_focus_callback_on_thread,
-  "qa": _emscripten_set_fullscreenchange_callback_on_thread,
-  "ka": _emscripten_set_gamepadconnected_callback_on_thread,
-  "ja": _emscripten_set_gamepaddisconnected_callback_on_thread,
-  "ta": _emscripten_set_keydown_callback_on_thread,
-  "ra": _emscripten_set_keypress_callback_on_thread,
-  "sa": _emscripten_set_keyup_callback_on_thread,
-  "Fa": _emscripten_set_mousedown_callback_on_thread,
-  "Da": _emscripten_set_mouseenter_callback_on_thread,
-  "Ca": _emscripten_set_mouseleave_callback_on_thread,
-  "Ga": _emscripten_set_mousemove_callback_on_thread,
-  "Ea": _emscripten_set_mouseup_callback_on_thread,
-  "ua": _emscripten_set_pointerlockchange_callback_on_thread,
-  "pa": _emscripten_set_resize_callback_on_thread,
-  "va": _emscripten_set_touchcancel_callback_on_thread,
-  "xa": _emscripten_set_touchend_callback_on_thread,
-  "wa": _emscripten_set_touchmove_callback_on_thread,
-  "ya": _emscripten_set_touchstart_callback_on_thread,
-  "oa": _emscripten_set_visibilitychange_callback_on_thread,
-  "Ba": _emscripten_set_wheel_callback_on_thread,
+  "W": _emscripten_set_element_css_size,
+  "Ba": _emscripten_set_focus_callback_on_thread,
+  "ra": _emscripten_set_fullscreenchange_callback_on_thread,
+  "la": _emscripten_set_gamepadconnected_callback_on_thread,
+  "ka": _emscripten_set_gamepaddisconnected_callback_on_thread,
+  "ua": _emscripten_set_keydown_callback_on_thread,
+  "sa": _emscripten_set_keypress_callback_on_thread,
+  "ta": _emscripten_set_keyup_callback_on_thread,
+  "Ga": _emscripten_set_mousedown_callback_on_thread,
+  "Ea": _emscripten_set_mouseenter_callback_on_thread,
+  "Da": _emscripten_set_mouseleave_callback_on_thread,
+  "Ha": _emscripten_set_mousemove_callback_on_thread,
+  "Fa": _emscripten_set_mouseup_callback_on_thread,
+  "va": _emscripten_set_pointerlockchange_callback_on_thread,
+  "qa": _emscripten_set_resize_callback_on_thread,
+  "wa": _emscripten_set_touchcancel_callback_on_thread,
+  "ya": _emscripten_set_touchend_callback_on_thread,
+  "xa": _emscripten_set_touchmove_callback_on_thread,
+  "za": _emscripten_set_touchstart_callback_on_thread,
+  "pa": _emscripten_set_visibilitychange_callback_on_thread,
+  "Ca": _emscripten_set_wheel_callback_on_thread,
   "R": _emscripten_sleep,
-  "Lb": _emscripten_thread_sleep,
-  "Ya": _endpwent,
-  "Jb": _environ_get,
-  "Kb": _environ_sizes_get,
-  "vb": _exit,
+  "Nb": _emscripten_thread_sleep,
+  "Za": _endpwent,
+  "Lb": _environ_get,
+  "Mb": _environ_sizes_get,
+  "wb": _exit,
   "P": _fd_close,
-  "fa": _fd_read,
-  "zb": _fd_seek,
-  "U": _fd_write,
+  "Kb": _fd_fdstat_get,
+  "ga": _fd_read,
+  "Ab": _fd_seek,
+  "V": _fd_write,
   "b": _getTempRet0,
-  "kc": get_canvas_height,
-  "vc": get_canvas_width,
-  "Za": _getpwent,
+  "oc": get_canvas_height,
+  "zc": get_canvas_width,
+  "_a": _getpwent,
   "K": _gettimeofday,
-  "jb": invoke_fi,
-  "xb": invoke_fii,
+  "kb": invoke_fi,
+  "yb": invoke_fii,
   "w": invoke_i,
   "e": invoke_ii,
   "a": invoke_iii,
@@ -10972,237 +11069,243 @@ var asmLibraryArg = {
   "k": invoke_iiiii,
   "u": invoke_iiiiii,
   "A": invoke_iiiiiii,
-  "ia": invoke_iiiiiiii,
-  "wb": invoke_iiiiiiiii,
-  "Bb": invoke_iiij,
-  "Cb": invoke_iij,
-  "Db": invoke_iiji,
-  "Eb": invoke_ji,
-  "yb": invoke_jii,
+  "ja": invoke_iiiiiiii,
+  "xb": invoke_iiiiiiiii,
+  "Cb": invoke_iiij,
+  "Db": invoke_iij,
+  "Eb": invoke_iiji,
+  "Fb": invoke_ji,
+  "zb": invoke_jii,
   "p": invoke_v,
-  "ee": invoke_vffff,
+  "ie": invoke_vffff,
   "h": invoke_vi,
-  "nb": invoke_vif,
+  "ob": invoke_vif,
   "g": invoke_vii,
   "i": invoke_viii,
   "l": invoke_viiii,
   "t": invoke_viiiii,
   "m": invoke_viiiiii,
-  "F": invoke_viiiiiii,
-  "ea": invoke_viiiiiiii,
-  "ba": invoke_viiiiiiiii,
-  "Ab": invoke_viiiiiji,
-  "G": _llvm_eh_typeid_for,
+  "G": invoke_viiiiiii,
+  "fa": invoke_viiiiiiii,
+  "ca": invoke_viiiiiiiii,
+  "Bb": invoke_viiiiiji,
+  "H": _llvm_eh_typeid_for,
   "y": _setTempRet0,
-  "_a": _setpwent,
+  "$a": _setpwent,
   "B": _sigaction,
-  "Xa": _signal,
+  "Ya": _signal,
   "O": _time
 };
 var asm = createWasm();
 var ___wasm_call_ctors = Module["___wasm_call_ctors"] = function() {
-  return (___wasm_call_ctors = Module["___wasm_call_ctors"] = Module["asm"]["df"]).apply(null, arguments)
+  return (___wasm_call_ctors = Module["___wasm_call_ctors"] = Module["asm"]["hf"]).apply(null, arguments)
 };
 var _main = Module["_main"] = function() {
-  return (_main = Module["_main"] = Module["asm"]["ef"]).apply(null, arguments)
+  return (_main = Module["_main"] = Module["asm"]["jf"]).apply(null, arguments)
 };
 var ___errno_location = Module["___errno_location"] = function() {
-  return (___errno_location = Module["___errno_location"] = Module["asm"]["gf"]).apply(null, arguments)
+  return (___errno_location = Module["___errno_location"] = Module["asm"]["lf"]).apply(null, arguments)
+};
+var _memset = Module["_memset"] = function() {
+  return (_memset = Module["_memset"] = Module["asm"]["mf"]).apply(null, arguments)
 };
 var _free = Module["_free"] = function() {
-  return (_free = Module["_free"] = Module["asm"]["hf"]).apply(null, arguments)
+  return (_free = Module["_free"] = Module["asm"]["nf"]).apply(null, arguments)
 };
 var _malloc = Module["_malloc"] = function() {
-  return (_malloc = Module["_malloc"] = Module["asm"]["jf"]).apply(null, arguments)
+  return (_malloc = Module["_malloc"] = Module["asm"]["of"]).apply(null, arguments)
 };
 var _fflush = Module["_fflush"] = function() {
-  return (_fflush = Module["_fflush"] = Module["asm"]["kf"]).apply(null, arguments)
+  return (_fflush = Module["_fflush"] = Module["asm"]["pf"]).apply(null, arguments)
 };
 var __get_tzname = Module["__get_tzname"] = function() {
-  return (__get_tzname = Module["__get_tzname"] = Module["asm"]["lf"]).apply(null, arguments)
+  return (__get_tzname = Module["__get_tzname"] = Module["asm"]["qf"]).apply(null, arguments)
 };
 var __get_daylight = Module["__get_daylight"] = function() {
-  return (__get_daylight = Module["__get_daylight"] = Module["asm"]["mf"]).apply(null, arguments)
+  return (__get_daylight = Module["__get_daylight"] = Module["asm"]["rf"]).apply(null, arguments)
 };
 var __get_timezone = Module["__get_timezone"] = function() {
-  return (__get_timezone = Module["__get_timezone"] = Module["asm"]["nf"]).apply(null, arguments)
+  return (__get_timezone = Module["__get_timezone"] = Module["asm"]["sf"]).apply(null, arguments)
 };
 var stackSave = Module["stackSave"] = function() {
-  return (stackSave = Module["stackSave"] = Module["asm"]["of"]).apply(null, arguments)
+  return (stackSave = Module["stackSave"] = Module["asm"]["tf"]).apply(null, arguments)
 };
 var stackRestore = Module["stackRestore"] = function() {
-  return (stackRestore = Module["stackRestore"] = Module["asm"]["pf"]).apply(null, arguments)
+  return (stackRestore = Module["stackRestore"] = Module["asm"]["uf"]).apply(null, arguments)
 };
 var stackAlloc = Module["stackAlloc"] = function() {
-  return (stackAlloc = Module["stackAlloc"] = Module["asm"]["qf"]).apply(null, arguments)
+  return (stackAlloc = Module["stackAlloc"] = Module["asm"]["vf"]).apply(null, arguments)
 };
 var _setThrew = Module["_setThrew"] = function() {
-  return (_setThrew = Module["_setThrew"] = Module["asm"]["rf"]).apply(null, arguments)
+  return (_setThrew = Module["_setThrew"] = Module["asm"]["wf"]).apply(null, arguments)
 };
 var ___cxa_can_catch = Module["___cxa_can_catch"] = function() {
-  return (___cxa_can_catch = Module["___cxa_can_catch"] = Module["asm"]["sf"]).apply(null, arguments)
+  return (___cxa_can_catch = Module["___cxa_can_catch"] = Module["asm"]["xf"]).apply(null, arguments)
 };
 var ___cxa_is_pointer_type = Module["___cxa_is_pointer_type"] = function() {
-  return (___cxa_is_pointer_type = Module["___cxa_is_pointer_type"] = Module["asm"]["tf"]).apply(null, arguments)
+  return (___cxa_is_pointer_type = Module["___cxa_is_pointer_type"] = Module["asm"]["yf"]).apply(null, arguments)
+};
+var _memalign = Module["_memalign"] = function() {
+  return (_memalign = Module["_memalign"] = Module["asm"]["zf"]).apply(null, arguments)
 };
 var dynCall_ii = Module["dynCall_ii"] = function() {
-  return (dynCall_ii = Module["dynCall_ii"] = Module["asm"]["uf"]).apply(null, arguments)
+  return (dynCall_ii = Module["dynCall_ii"] = Module["asm"]["Af"]).apply(null, arguments)
 };
 var dynCall_vi = Module["dynCall_vi"] = function() {
-  return (dynCall_vi = Module["dynCall_vi"] = Module["asm"]["vf"]).apply(null, arguments)
+  return (dynCall_vi = Module["dynCall_vi"] = Module["asm"]["Bf"]).apply(null, arguments)
 };
 var dynCall_vii = Module["dynCall_vii"] = function() {
-  return (dynCall_vii = Module["dynCall_vii"] = Module["asm"]["wf"]).apply(null, arguments)
+  return (dynCall_vii = Module["dynCall_vii"] = Module["asm"]["Cf"]).apply(null, arguments)
 };
 var dynCall_iii = Module["dynCall_iii"] = function() {
-  return (dynCall_iii = Module["dynCall_iii"] = Module["asm"]["xf"]).apply(null, arguments)
+  return (dynCall_iii = Module["dynCall_iii"] = Module["asm"]["Df"]).apply(null, arguments)
 };
 var dynCall_iiiii = Module["dynCall_iiiii"] = function() {
-  return (dynCall_iiiii = Module["dynCall_iiiii"] = Module["asm"]["yf"]).apply(null, arguments)
+  return (dynCall_iiiii = Module["dynCall_iiiii"] = Module["asm"]["Ef"]).apply(null, arguments)
 };
 var dynCall_v = Module["dynCall_v"] = function() {
-  return (dynCall_v = Module["dynCall_v"] = Module["asm"]["zf"]).apply(null, arguments)
+  return (dynCall_v = Module["dynCall_v"] = Module["asm"]["Ff"]).apply(null, arguments)
 };
 var dynCall_viii = Module["dynCall_viii"] = function() {
-  return (dynCall_viii = Module["dynCall_viii"] = Module["asm"]["Af"]).apply(null, arguments)
+  return (dynCall_viii = Module["dynCall_viii"] = Module["asm"]["Gf"]).apply(null, arguments)
 };
 var dynCall_viiiiii = Module["dynCall_viiiiii"] = function() {
-  return (dynCall_viiiiii = Module["dynCall_viiiiii"] = Module["asm"]["Bf"]).apply(null, arguments)
+  return (dynCall_viiiiii = Module["dynCall_viiiiii"] = Module["asm"]["Hf"]).apply(null, arguments)
 };
 var dynCall_iiii = Module["dynCall_iiii"] = function() {
-  return (dynCall_iiii = Module["dynCall_iiii"] = Module["asm"]["Cf"]).apply(null, arguments)
+  return (dynCall_iiii = Module["dynCall_iiii"] = Module["asm"]["If"]).apply(null, arguments)
 };
 var dynCall_viiii = Module["dynCall_viiii"] = function() {
-  return (dynCall_viiii = Module["dynCall_viiii"] = Module["asm"]["Df"]).apply(null, arguments)
+  return (dynCall_viiii = Module["dynCall_viiii"] = Module["asm"]["Jf"]).apply(null, arguments)
 };
 var dynCall_i = Module["dynCall_i"] = function() {
-  return (dynCall_i = Module["dynCall_i"] = Module["asm"]["Ef"]).apply(null, arguments)
+  return (dynCall_i = Module["dynCall_i"] = Module["asm"]["Kf"]).apply(null, arguments)
 };
 var dynCall_viiiii = Module["dynCall_viiiii"] = function() {
-  return (dynCall_viiiii = Module["dynCall_viiiii"] = Module["asm"]["Ff"]).apply(null, arguments)
+  return (dynCall_viiiii = Module["dynCall_viiiii"] = Module["asm"]["Lf"]).apply(null, arguments)
 };
 var dynCall_iiiiiiii = Module["dynCall_iiiiiiii"] = function() {
-  return (dynCall_iiiiiiii = Module["dynCall_iiiiiiii"] = Module["asm"]["Gf"]).apply(null, arguments)
+  return (dynCall_iiiiiiii = Module["dynCall_iiiiiiii"] = Module["asm"]["Mf"]).apply(null, arguments)
 };
 var dynCall_iiiiiii = Module["dynCall_iiiiiii"] = function() {
-  return (dynCall_iiiiiii = Module["dynCall_iiiiiii"] = Module["asm"]["Hf"]).apply(null, arguments)
+  return (dynCall_iiiiiii = Module["dynCall_iiiiiii"] = Module["asm"]["Nf"]).apply(null, arguments)
 };
 var dynCall_fiii = Module["dynCall_fiii"] = function() {
-  return (dynCall_fiii = Module["dynCall_fiii"] = Module["asm"]["If"]).apply(null, arguments)
+  return (dynCall_fiii = Module["dynCall_fiii"] = Module["asm"]["Of"]).apply(null, arguments)
 };
 var dynCall_viiif = Module["dynCall_viiif"] = function() {
-  return (dynCall_viiif = Module["dynCall_viiif"] = Module["asm"]["Jf"]).apply(null, arguments)
+  return (dynCall_viiif = Module["dynCall_viiif"] = Module["asm"]["Pf"]).apply(null, arguments)
 };
 var dynCall_ff = Module["dynCall_ff"] = function() {
-  return (dynCall_ff = Module["dynCall_ff"] = Module["asm"]["Kf"]).apply(null, arguments)
+  return (dynCall_ff = Module["dynCall_ff"] = Module["asm"]["Qf"]).apply(null, arguments)
 };
 var dynCall_fff = Module["dynCall_fff"] = function() {
-  return (dynCall_fff = Module["dynCall_fff"] = Module["asm"]["Lf"]).apply(null, arguments)
+  return (dynCall_fff = Module["dynCall_fff"] = Module["asm"]["Rf"]).apply(null, arguments)
 };
 var dynCall_f = Module["dynCall_f"] = function() {
-  return (dynCall_f = Module["dynCall_f"] = Module["asm"]["Mf"]).apply(null, arguments)
+  return (dynCall_f = Module["dynCall_f"] = Module["asm"]["Sf"]).apply(null, arguments)
 };
 var dynCall_iiiiii = Module["dynCall_iiiiii"] = function() {
-  return (dynCall_iiiiii = Module["dynCall_iiiiii"] = Module["asm"]["Nf"]).apply(null, arguments)
+  return (dynCall_iiiiii = Module["dynCall_iiiiii"] = Module["asm"]["Tf"]).apply(null, arguments)
 };
 var dynCall_viiiiiiiii = Module["dynCall_viiiiiiiii"] = function() {
-  return (dynCall_viiiiiiiii = Module["dynCall_viiiiiiiii"] = Module["asm"]["Of"]).apply(null, arguments)
+  return (dynCall_viiiiiiiii = Module["dynCall_viiiiiiiii"] = Module["asm"]["Uf"]).apply(null, arguments)
 };
 var dynCall_viiiiiii = Module["dynCall_viiiiiii"] = function() {
-  return (dynCall_viiiiiii = Module["dynCall_viiiiiii"] = Module["asm"]["Pf"]).apply(null, arguments)
+  return (dynCall_viiiiiii = Module["dynCall_viiiiiii"] = Module["asm"]["Vf"]).apply(null, arguments)
 };
 var dynCall_ifi = Module["dynCall_ifi"] = function() {
-  return (dynCall_ifi = Module["dynCall_ifi"] = Module["asm"]["Qf"]).apply(null, arguments)
+  return (dynCall_ifi = Module["dynCall_ifi"] = Module["asm"]["Wf"]).apply(null, arguments)
 };
 var dynCall_fi = Module["dynCall_fi"] = function() {
-  return (dynCall_fi = Module["dynCall_fi"] = Module["asm"]["Rf"]).apply(null, arguments)
+  return (dynCall_fi = Module["dynCall_fi"] = Module["asm"]["Xf"]).apply(null, arguments)
 };
 var dynCall_viiiiiiii = Module["dynCall_viiiiiiii"] = function() {
-  return (dynCall_viiiiiiii = Module["dynCall_viiiiiiii"] = Module["asm"]["Sf"]).apply(null, arguments)
+  return (dynCall_viiiiiiii = Module["dynCall_viiiiiiii"] = Module["asm"]["Yf"]).apply(null, arguments)
 };
 var dynCall_iiiiiiiiii = Module["dynCall_iiiiiiiiii"] = function() {
-  return (dynCall_iiiiiiiiii = Module["dynCall_iiiiiiiiii"] = Module["asm"]["Tf"]).apply(null, arguments)
+  return (dynCall_iiiiiiiiii = Module["dynCall_iiiiiiiiii"] = Module["asm"]["Zf"]).apply(null, arguments)
 };
 var dynCall_fii = Module["dynCall_fii"] = function() {
-  return (dynCall_fii = Module["dynCall_fii"] = Module["asm"]["Uf"]).apply(null, arguments)
+  return (dynCall_fii = Module["dynCall_fii"] = Module["asm"]["_f"]).apply(null, arguments)
 };
 var dynCall_vf = Module["dynCall_vf"] = function() {
-  return (dynCall_vf = Module["dynCall_vf"] = Module["asm"]["Vf"]).apply(null, arguments)
+  return (dynCall_vf = Module["dynCall_vf"] = Module["asm"]["$f"]).apply(null, arguments)
 };
 var dynCall_iiiiiiiii = Module["dynCall_iiiiiiiii"] = function() {
-  return (dynCall_iiiiiiiii = Module["dynCall_iiiiiiiii"] = Module["asm"]["Wf"]).apply(null, arguments)
+  return (dynCall_iiiiiiiii = Module["dynCall_iiiiiiiii"] = Module["asm"]["ag"]).apply(null, arguments)
 };
 var dynCall_ji = Module["dynCall_ji"] = function() {
-  return (dynCall_ji = Module["dynCall_ji"] = Module["asm"]["Xf"]).apply(null, arguments)
+  return (dynCall_ji = Module["dynCall_ji"] = Module["asm"]["bg"]).apply(null, arguments)
 };
 var dynCall_vif = Module["dynCall_vif"] = function() {
-  return (dynCall_vif = Module["dynCall_vif"] = Module["asm"]["Yf"]).apply(null, arguments)
+  return (dynCall_vif = Module["dynCall_vif"] = Module["asm"]["cg"]).apply(null, arguments)
 };
 var dynCall_iiiiif = Module["dynCall_iiiiif"] = function() {
-  return (dynCall_iiiiif = Module["dynCall_iiiiif"] = Module["asm"]["Zf"]).apply(null, arguments)
+  return (dynCall_iiiiif = Module["dynCall_iiiiif"] = Module["asm"]["dg"]).apply(null, arguments)
 };
 var dynCall_iiij = Module["dynCall_iiij"] = function() {
-  return (dynCall_iiij = Module["dynCall_iiij"] = Module["asm"]["_f"]).apply(null, arguments)
+  return (dynCall_iiij = Module["dynCall_iiij"] = Module["asm"]["eg"]).apply(null, arguments)
 };
 var dynCall_viiiiiji = Module["dynCall_viiiiiji"] = function() {
-  return (dynCall_viiiiiji = Module["dynCall_viiiiiji"] = Module["asm"]["$f"]).apply(null, arguments)
+  return (dynCall_viiiiiji = Module["dynCall_viiiiiji"] = Module["asm"]["fg"]).apply(null, arguments)
 };
 var dynCall_iij = Module["dynCall_iij"] = function() {
-  return (dynCall_iij = Module["dynCall_iij"] = Module["asm"]["ag"]).apply(null, arguments)
+  return (dynCall_iij = Module["dynCall_iij"] = Module["asm"]["gg"]).apply(null, arguments)
 };
 var dynCall_iiji = Module["dynCall_iiji"] = function() {
-  return (dynCall_iiji = Module["dynCall_iiji"] = Module["asm"]["bg"]).apply(null, arguments)
+  return (dynCall_iiji = Module["dynCall_iiji"] = Module["asm"]["hg"]).apply(null, arguments)
 };
 var dynCall_jijii = Module["dynCall_jijii"] = function() {
-  return (dynCall_jijii = Module["dynCall_jijii"] = Module["asm"]["cg"]).apply(null, arguments)
+  return (dynCall_jijii = Module["dynCall_jijii"] = Module["asm"]["ig"]).apply(null, arguments)
 };
 var dynCall_jiji = Module["dynCall_jiji"] = function() {
-  return (dynCall_jiji = Module["dynCall_jiji"] = Module["asm"]["dg"]).apply(null, arguments)
+  return (dynCall_jiji = Module["dynCall_jiji"] = Module["asm"]["jg"]).apply(null, arguments)
 };
 var dynCall_iiiiiidii = Module["dynCall_iiiiiidii"] = function() {
-  return (dynCall_iiiiiidii = Module["dynCall_iiiiiidii"] = Module["asm"]["eg"]).apply(null, arguments)
+  return (dynCall_iiiiiidii = Module["dynCall_iiiiiidii"] = Module["asm"]["kg"]).apply(null, arguments)
 };
 var dynCall_viiiiiiiiiii = Module["dynCall_viiiiiiiiiii"] = function() {
-  return (dynCall_viiiiiiiiiii = Module["dynCall_viiiiiiiiiii"] = Module["asm"]["fg"]).apply(null, arguments)
+  return (dynCall_viiiiiiiiiii = Module["dynCall_viiiiiiiiiii"] = Module["asm"]["lg"]).apply(null, arguments)
 };
 var dynCall_vffff = Module["dynCall_vffff"] = function() {
-  return (dynCall_vffff = Module["dynCall_vffff"] = Module["asm"]["gg"]).apply(null, arguments)
+  return (dynCall_vffff = Module["dynCall_vffff"] = Module["asm"]["mg"]).apply(null, arguments)
 };
 var dynCall_vff = Module["dynCall_vff"] = function() {
-  return (dynCall_vff = Module["dynCall_vff"] = Module["asm"]["hg"]).apply(null, arguments)
+  return (dynCall_vff = Module["dynCall_vff"] = Module["asm"]["ng"]).apply(null, arguments)
 };
 var dynCall_vfi = Module["dynCall_vfi"] = function() {
-  return (dynCall_vfi = Module["dynCall_vfi"] = Module["asm"]["ig"]).apply(null, arguments)
+  return (dynCall_vfi = Module["dynCall_vfi"] = Module["asm"]["og"]).apply(null, arguments)
 };
 var dynCall_viif = Module["dynCall_viif"] = function() {
-  return (dynCall_viif = Module["dynCall_viif"] = Module["asm"]["jg"]).apply(null, arguments)
+  return (dynCall_viif = Module["dynCall_viif"] = Module["asm"]["pg"]).apply(null, arguments)
 };
 var dynCall_viff = Module["dynCall_viff"] = function() {
-  return (dynCall_viff = Module["dynCall_viff"] = Module["asm"]["kg"]).apply(null, arguments)
+  return (dynCall_viff = Module["dynCall_viff"] = Module["asm"]["qg"]).apply(null, arguments)
 };
 var dynCall_vifff = Module["dynCall_vifff"] = function() {
-  return (dynCall_vifff = Module["dynCall_vifff"] = Module["asm"]["lg"]).apply(null, arguments)
+  return (dynCall_vifff = Module["dynCall_vifff"] = Module["asm"]["rg"]).apply(null, arguments)
 };
 var dynCall_viffff = Module["dynCall_viffff"] = function() {
-  return (dynCall_viffff = Module["dynCall_viffff"] = Module["asm"]["mg"]).apply(null, arguments)
+  return (dynCall_viffff = Module["dynCall_viffff"] = Module["asm"]["sg"]).apply(null, arguments)
 };
 var dynCall_iidiiii = Module["dynCall_iidiiii"] = function() {
-  return (dynCall_iidiiii = Module["dynCall_iidiiii"] = Module["asm"]["ng"]).apply(null, arguments)
+  return (dynCall_iidiiii = Module["dynCall_iidiiii"] = Module["asm"]["tg"]).apply(null, arguments)
 };
 var dynCall_jii = Module["dynCall_jii"] = function() {
-  return (dynCall_jii = Module["dynCall_jii"] = Module["asm"]["og"]).apply(null, arguments)
+  return (dynCall_jii = Module["dynCall_jii"] = Module["asm"]["ug"]).apply(null, arguments)
 };
 var _asyncify_start_unwind = Module["_asyncify_start_unwind"] = function() {
-  return (_asyncify_start_unwind = Module["_asyncify_start_unwind"] = Module["asm"]["pg"]).apply(null, arguments)
+  return (_asyncify_start_unwind = Module["_asyncify_start_unwind"] = Module["asm"]["vg"]).apply(null, arguments)
 };
 var _asyncify_stop_unwind = Module["_asyncify_stop_unwind"] = function() {
-  return (_asyncify_stop_unwind = Module["_asyncify_stop_unwind"] = Module["asm"]["qg"]).apply(null, arguments)
+  return (_asyncify_stop_unwind = Module["_asyncify_stop_unwind"] = Module["asm"]["wg"]).apply(null, arguments)
 };
 var _asyncify_start_rewind = Module["_asyncify_start_rewind"] = function() {
-  return (_asyncify_start_rewind = Module["_asyncify_start_rewind"] = Module["asm"]["rg"]).apply(null, arguments)
+  return (_asyncify_start_rewind = Module["_asyncify_start_rewind"] = Module["asm"]["xg"]).apply(null, arguments)
 };
 var _asyncify_stop_rewind = Module["_asyncify_stop_rewind"] = function() {
-  return (_asyncify_stop_rewind = Module["_asyncify_stop_rewind"] = Module["asm"]["sg"]).apply(null, arguments)
+  return (_asyncify_stop_rewind = Module["_asyncify_stop_rewind"] = Module["asm"]["yg"]).apply(null, arguments)
 };
 
 function invoke_ii(index, a1) {
