@@ -62,6 +62,11 @@
       #textmsgs {
         font-family: 'Lucida Console', Monaco, monospace;
         font-size: 200%;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%); /* for IE 9 */
+        -webkit-transform: translate(-50%, -50%); /* for Safari */
         text-align: center;
         margin: auto;
         position: absolute;
@@ -169,7 +174,11 @@
   <body>
 
     <div class=spinner id=spinner></div>
-    <div class=emscripten id=status>Downloading...</div><span id=controls><span hidden><input id=resize type=checkbox checked>Resize canvas</span><span hidden><input id=pointerLock type=checkbox checked>Lock/hide mouse pointer    </span></span>
+    <div class=emscripten id=status>Downloading...</div>
+    <span id=controls>
+      <span hidden><input id=resize type=checkbox checked>Resize canvas</span>
+      <span hidden><input id=pointerLock type=checkbox checked>Lock/hide mouse pointer    </span>
+    </span>
     <div class=emscripten><progress hidden id=progress max=100 value=0></progress></div>
     <div class=emscripten_border><canvas class=emscripten id=canvas oncontextmenu=event.preventDefault() tabindex=-1></canvas></div>
     <div hidden><textarea id=output rows=8 hidden></textarea></div>
@@ -183,12 +192,10 @@
 
 
       var file_being_loaded = "";
-      var fileresulthere = {},
-        game_file = {};
-
-      file_read_count = 0;
-      file_total_count = 1;
-      game_file = "";
+      var fileresulthere = {};
+      var file_read_count = 0;
+      var file_total_count = 1;
+      var game_file = "";
 
       function loadGameFile(filename) {
         file_being_loaded = filename;
@@ -196,7 +203,11 @@
         var oReq = new XMLHttpRequest();
         oReq.open("GET", filename, true);
         oReq.responseType = "arraybuffer";
-        oReq.onprogress = function (e) { if(e.lengthComputable){writeMsgOnCanvas('loading ' + file_being_loaded + Math.round((e.loaded/e.total)*100) + "% ...");}}
+        oReq.onprogress = function (e) {
+          if(e.lengthComputable){
+            writeMsgOnCanvas('loading ' + file_being_loaded + ' ' + Math.round((e.loaded/e.total)*100) + '% ...');
+          }
+        }
         oReq.onload = function(oEvent) {
           var arrayBuffer = oReq.response; // Note: not oReq.responseText
           if (arrayBuffer) {
@@ -274,7 +285,8 @@
           canvas: function() {
             var e = document.getElementById("canvas");
             return window.addEventListener("resize", (function(t) {
-              Module.canvas.style.width = document.getElementById("canvas").clientWidth + "px", Module.canvas.style.height = document.getElementById("canvas").clientHeight + "px"
+            //  Module.canvas.style.width = document.getElementById("canvas").clientWidth + "px",
+            //  Module.canvas.style.height = document.getElementById("canvas").clientHeight + "px"
             }), !0), e.addEventListener("webglcontextlost", (function(e) {
               alert("WebGL context lost. You will need to reload the page."), e.preventDefault()
             }), !1), e
