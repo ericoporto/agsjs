@@ -1,7 +1,7 @@
 # agsjs
 ags js! This repository is only file storage for the GitHub Pages so it's easier to play with the build on a browser.
 
-**Source code is in my ags fork here https://github.com/ericoporto/ags/tree/ags3--sdl2--emscripten**
+**Source code is in my ags fork here https://github.com/ericoporto/ags/tree/emscripten**
 
 - Codebase and build information here: https://github.com/ericoporto/ags/issues/12
 
