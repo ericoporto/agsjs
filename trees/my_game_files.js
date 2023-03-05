@@ -1,0 +1,1 @@
+var gamefiles = ['Roading.ags', 'acsetup.cfg'];

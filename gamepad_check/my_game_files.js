@@ -1,0 +1,1 @@
+var gamefiles = ['GamepadExample.ags', 'acsetup.cfg'];

@@ -1,0 +1,1 @@
+var gamefiles = ['DungeonCraw.ags', 'acsetup.cfg'];
