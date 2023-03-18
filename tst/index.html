@@ -482,7 +482,7 @@
 
             if (file_read_count === file_total_count) {
               hideAll();
-              Module.callMain(['/' + game_file, '--windowed --log-sdl=1 --log-stdout=all:all']);
+              Module.callMain(['/' + game_file, '--windowed', '--log-sdl=1', '--log-stdout=all:all']);
             } else {
               loadGameFile(gamefiles[file_read_count]);
             }
@@ -542,7 +542,7 @@
       if (file_read_count === file_total_count) {
         hideAll();
         
-        Module.callMain(['/' + game_file.name, '--windowed --log-sdl=1 --log-stdout=all:all']);
+        Module.callMain(['/' + game_file.name, '--windowed', '--log-sdl=1', '--log-stdout=all:all']);
       } else {
         file_reader_fr.readAsArrayBuffer(fileInput.files[file_read_count]);
       }
