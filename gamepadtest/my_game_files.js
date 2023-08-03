@@ -1,0 +1,1 @@
+var gamefiles = ['JoystickTest.ags', 'acsetup.cfg'];
