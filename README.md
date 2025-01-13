@@ -6,7 +6,7 @@ Single Game Example: https://ericoporto.github.io/agsjs/single_game_example/
 
 ## ⚠⚠THIS CODE IS NOW OBSOLETE, THE EMSCRIPTEN BRANCH HAS BEEN MERGED IN AGS REPOSITORIES⚠⚠
 
-## 🚨🚨IF YOU WISH TO MAKE WEB GAMES WITH AGS JUST DOWNLOAD THE LATEST VERSION OF THE 3.6.0.X RELEASES OF AGS🚨🚨
+## 🚨🚨IF YOU WISH TO MAKE WEB GAMES WITH AGS JUST DOWNLOAD THE LATEST VERSION OF THE 3.6.X RELEASES OF AGS🚨🚨
 
 ags js! This repository is only file storage for the GitHub Pages so it's easier to play with the build on a browser.
 
